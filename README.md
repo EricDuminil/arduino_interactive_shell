@@ -15,7 +15,7 @@ Console is ready!
 Calling : led(1)
 > led 0
 Calling : led(0)
-> double 12345 
+> double 12345
 Calling : double(12345)
 12345 * 2 = 24690
 > double
@@ -80,6 +80,50 @@ Once the microcontroller runs, commands can be sent directly from Arduino IDE Se
 If an unknown command is sent via Serial, a list of known commands will be displayed.
 
 If a command expects an integer, trying to call it without argument will not run anything.
+
+
+    Console is ready!
+    > double 456
+    Calling : double(456)
+    456 * 2 = 912
+    > double
+    'double' not supported. Available commands :
+      double 123 (Doubles the input value).
+      led 1/0 (LED on/off).
+      reset (restarts the microcontroller).
+    > led 0
+    Calling : led(0)
+    > reset
+    Calling : reset()
+    ets Jun  8 2016 00:22:57
+
+    rst:0xc (SW_CPU_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+    configsip: 0, SPIWP:0xee
+    clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+    mode:DIO, clock div:2
+    load:0x3fff0018,len:4
+    load:0x3fff001c,len:1044
+    load:0x40078000,len:8896
+    load:0x40080400,len:5828
+    entry 0x400806ac
+    Calling : led(1)
+    Console is ready!
+    >
+
+Commands can also be run directly from C++ code, e.g. with string literals:
+
+    command_invoker::execute("led 1");
+
+or from a webserver query string (be careful!):
+
+    void handleWebServerCommand() {
+      if (!shouldBeAllowed()) {
+        return http.requestAuthentication(DIGEST_AUTH);
+      }
+      http.sendHeader("Location", "/");
+      http.send(303);
+      command_invoker::execute(http.arg("send").c_str());
+    }
 
 ## Adding commands
 
