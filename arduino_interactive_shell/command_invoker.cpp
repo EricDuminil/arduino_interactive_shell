@@ -93,7 +93,7 @@ namespace command_invoker {
   }
 
   /*
-   * Tries to find the corresponding callback for a given command. Name and number of argument should fit.
+   * Tries to find the corresponding callback for a given command. Name and number of arguments should fit.
    */
   void execute(const char *command_line) {
     char function_name[MAX_COMMAND_SIZE];
