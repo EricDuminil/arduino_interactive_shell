@@ -1,0 +1,8 @@
+.pioenvs
+.pio/libdeps
+.pio/build
+.vscode
+*.ino.cpp
+.project
+.cproject
+.settings
