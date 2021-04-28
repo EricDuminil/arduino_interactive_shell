@@ -93,11 +93,6 @@ For example:
     sensor_console::defineCommand("free", util::showFreeSpace, F(" (Displays available heap space)"));
     sensor_console::defineIntCommand("set_time", ntp::setLocalTime, F(" 1618829570 (Sets time to the given UNIX time)"));
 
-
-## Author
-
- * Eric Duminil
-
 ## License
 
 Copyright © 2021, Eric Duminil
