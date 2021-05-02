@@ -17,30 +17,28 @@ namespace command_invoker {
 
   Command commands[MAX_COMMANDS];
 
-  //NOTE: Probably possible to DRY (with templates?)
-  void defineCommand(const char *name, void (*function)(void), const __FlashStringHelper *doc_fstring) {
-    const char *doc = (const char*) doc_fstring;
+  bool addCommand(const char *name, const __FlashStringHelper *doc_fstring) {
     if (commands_count < MAX_COMMANDS) {
       commands[commands_count].name = name;
-      commands[commands_count].voidFunction = function;
-      commands[commands_count].doc = doc;
-      commands[commands_count].has_parameter = false;
-      commands_count++;
+      commands[commands_count].doc = (const char*) doc_fstring;
+      return true;
     } else {
       Serial.println(F("Too many commands have been defined."));
+      return false;
+    }
+  }
+
+  void defineCommand(const char *name, void (*function)(void), const __FlashStringHelper *doc_fstring) {
+    if (addCommand(name, doc_fstring)) {
+      commands[commands_count].voidFunction = function;
+      commands[commands_count++].has_parameter = false;
     }
   }
 
   void defineIntCommand(const char *name, void (*function)(int32_t), const __FlashStringHelper *doc_fstring) {
-    const char *doc = (const char*) doc_fstring;
-    if (commands_count < MAX_COMMANDS) {
-      commands[commands_count].name = name;
+    if (addCommand(name, doc_fstring)) {
       commands[commands_count].intFunction = function;
-      commands[commands_count].doc = doc;
-      commands[commands_count].has_parameter = true;
-      commands_count++;
-    } else {
-      Serial.println(F("Too many commands have been defined."));
+      commands[commands_count++].has_parameter = true;
     }
   }
 
