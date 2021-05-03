@@ -11,15 +11,6 @@ namespace command_invoker {
     STRING
   };
 
-  struct CommandLine {
-    char function_name[MAX_COMMAND_SIZE];
-    input_type argument_type;
-    union {
-      int32_t int_argument;
-      char str_argument[MAX_COMMAND_SIZE];
-    };
-  };
-
   struct Command {
     const char *name;
     union {
@@ -29,6 +20,15 @@ namespace command_invoker {
     };
     const char *doc;
     input_type parameter_type;
+  };
+
+  struct CommandLine {
+    char function_name[MAX_COMMAND_SIZE];
+    input_type argument_type;
+    union {
+      int32_t int_argument;
+      char str_argument[MAX_COMMAND_SIZE];
+    };
   };
 
   Command commands[MAX_COMMANDS];
