@@ -11,6 +11,15 @@ namespace command_invoker {
     STRING
   };
 
+  struct CommandLine {
+    char function_name[MAX_COMMAND_SIZE];
+    input_type argument_type;
+    union {
+      int32_t int_argument;
+      char str_argument[MAX_COMMAND_SIZE];
+    };
+  };
+
   struct Command {
     const char *name;
     union {
@@ -60,7 +69,7 @@ namespace command_invoker {
    * Tries to split a string command (e.g. 'mqtt 60' or 'show_csv') into a function_name and an argument.
    * Returns the argument type, and defines the corresponding argument.
    */
-  input_type parseCommand(const char *command, char *function_name, int32_t &int_argument, char *str_argument) {
+  void parseCommand(const char *command, CommandLine &command_line) {
     char split_command[MAX_COMMAND_SIZE];
     strlcpy(split_command, command, MAX_COMMAND_SIZE);
     char *part1;
@@ -68,21 +77,22 @@ namespace command_invoker {
     part1 = strtok(split_command, " ");
     if (!part1) {
       Serial.println(F("Received empty command"));
-      return NONE;
+      command_line.argument_type = NONE;
+      return;
     }
-    strlcpy(function_name, part1, MAX_COMMAND_SIZE);
+    strlcpy(command_line.function_name, part1, MAX_COMMAND_SIZE);
     arg = strtok(NULL, "");
     if (arg) {
       char *end;
-      int_argument = strtol(arg, &end, 10);
+      command_line.int_argument = strtol(arg, &end, 10);
       if (*end) {
-        strlcpy(str_argument, arg, MAX_COMMAND_SIZE);
-        return STRING;
+        strlcpy(command_line.str_argument, arg, MAX_COMMAND_SIZE);
+        command_line.argument_type = STRING;
       } else {
-        return INT32;
+        command_line.argument_type = INT32;
       }
     } else {
-      return NONE;
+      command_line.argument_type = NONE;
     }
   }
 
@@ -105,39 +115,40 @@ namespace command_invoker {
   /*
    * Tries to find the corresponding callback for a given command. Name and parameter type should fit.
    */
-  void execute(const char *command_line) {
-    char function_name[MAX_COMMAND_SIZE];
-    char str_argument[MAX_COMMAND_SIZE];
-    int32_t int_argument = 0;
-    input_type argument_type;
-    argument_type = parseCommand(command_line, function_name, int_argument, str_argument);
+  void execute(const char *command_str) {
+    CommandLine input;
+    parseCommand(command_str, input);
+    Serial.print("Name :");
+    Serial.println(input.function_name);
+    Serial.print("ArgType :");
+    Serial.println(input.argument_type);
     for (uint8_t i = 0; i < commands_count; i++) {
-      if (!strcmp(function_name, commands[i].name) && argument_type == commands[i].parameter_type) {
+      if (!strcmp(input.function_name, commands[i].name) && input.argument_type == commands[i].parameter_type) {
         Serial.print(F("Calling : "));
-        Serial.print(function_name);
-        switch (argument_type) {
+        Serial.print(input.function_name);
+        switch (input.argument_type) {
         case NONE:
           Serial.println(F("()"));
           commands[i].voidFunction();
           break;
         case INT32:
           Serial.print(F("("));
-          Serial.print(int_argument);
+          Serial.print(input.int_argument);
           Serial.println(F(")"));
-          commands[i].intFunction(int_argument);
+          commands[i].intFunction(input.int_argument);
           break;
         case STRING:
           Serial.print(F("('"));
-          Serial.print(str_argument);
+          Serial.print(input.str_argument);
           Serial.println(F("')"));
-          commands[i].strFunction(str_argument);
+          commands[i].strFunction(input.str_argument);
           break;
           return;
         }
       }
     }
     Serial.print(F("'"));
-    Serial.print(command_line);
+    Serial.print(command_str);
     Serial.println(F("' not supported. Available commands :"));
     listAvailableCommands();
   }
