@@ -66,8 +66,8 @@ namespace command_invoker {
   }
 
   /*
-   * Tries to split a string command (e.g. 'mqtt 60' or 'show_csv') into a function_name and an argument.
-   * Returns the argument type, and defines the corresponding argument.
+   * Tries to split a string command (e.g. 'mqtt 60' or 'show_csv') into
+   * a CommandLine struct (function_name, argument_type and argument)
    */
   void parseCommand(const char *command, CommandLine &command_line) {
     char split_command[MAX_COMMAND_SIZE];
