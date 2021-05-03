@@ -10,7 +10,7 @@
  */
 
 namespace command_invoker {
-  void defineCommand(const char *name, void (*function)(void), const __FlashStringHelper *doc_fstring);
+  void defineCommand(const char *name, void (*function)(), const __FlashStringHelper *doc_fstring);
   void defineIntCommand(const char *name, void (*function)(int32_t), const __FlashStringHelper *doc_fstring);
   void defineStringCommand(const char *name, void (*function)(char*), const __FlashStringHelper *doc_fstring);
 

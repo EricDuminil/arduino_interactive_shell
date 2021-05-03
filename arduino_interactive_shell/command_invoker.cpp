@@ -14,7 +14,7 @@ namespace command_invoker {
   struct Command {
     const char *name;
     union {
-      void (*voidFunction)(void);
+      void (*voidFunction)();
       void (*intFunction)(int32_t);
       void (*strFunction)(char*);
     };
@@ -44,7 +44,7 @@ namespace command_invoker {
     }
   }
 
-  void defineCommand(const char *name, void (*function)(void), const __FlashStringHelper *doc_fstring) {
+  void defineCommand(const char *name, void (*function)(), const __FlashStringHelper *doc_fstring) {
     if (addCommand(name, doc_fstring)) {
       commands[commands_count].voidFunction = function;
       commands[commands_count++].parameter_type = NONE;
