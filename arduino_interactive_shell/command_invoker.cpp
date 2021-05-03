@@ -118,10 +118,6 @@ namespace command_invoker {
   void execute(const char *command_str) {
     CommandLine input;
     parseCommand(command_str, input);
-    Serial.print("Name :");
-    Serial.println(input.function_name);
-    Serial.print("ArgType :");
-    Serial.println(input.argument_type);
     for (uint8_t i = 0; i < commands_count; i++) {
       if (!strcmp(input.function_name, commands[i].name) && input.argument_type == commands[i].parameter_type) {
         Serial.print(F("Calling : "));
@@ -130,19 +126,18 @@ namespace command_invoker {
         case NONE:
           Serial.println(F("()"));
           commands[i].voidFunction();
-          break;
+          return;
         case INT32:
           Serial.print(F("("));
           Serial.print(input.int_argument);
           Serial.println(F(")"));
           commands[i].intFunction(input.int_argument);
-          break;
+          return;
         case STRING:
           Serial.print(F("('"));
           Serial.print(input.str_argument);
           Serial.println(F("')"));
           commands[i].strFunction(input.str_argument);
-          break;
           return;
         }
       }
