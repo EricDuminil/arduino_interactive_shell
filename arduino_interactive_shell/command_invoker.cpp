@@ -25,10 +25,8 @@ namespace command_invoker {
   struct CommandLine {
     char function_name[MAX_COMMAND_SIZE];
     input_type argument_type;
-    union {
-      int32_t int_argument;
-      char str_argument[MAX_COMMAND_SIZE];
-    };
+    int32_t int_argument;
+    char str_argument[MAX_COMMAND_SIZE];
   };
 
   Command commands[MAX_COMMANDS];
@@ -70,29 +68,32 @@ namespace command_invoker {
    * a CommandLine struct (function_name, argument_type and argument)
    */
   void parseCommand(const char *command, CommandLine &command_line) {
-    char split_command[MAX_COMMAND_SIZE];
-    strlcpy(split_command, command, MAX_COMMAND_SIZE);
-    char *part1;
-    char *arg;
-    part1 = strtok(split_command, " ");
-    if (!part1) {
+    if (strlen(command) == 0) {
       Serial.println(F("Received empty command"));
       command_line.argument_type = NONE;
       return;
     }
-    strlcpy(command_line.function_name, part1, MAX_COMMAND_SIZE);
-    arg = strtok(NULL, "");
-    if (arg) {
-      char *end;
-      command_line.int_argument = strtol(arg, &end, 10);
-      if (*end) {
-        strlcpy(command_line.str_argument, arg, MAX_COMMAND_SIZE);
-        command_line.argument_type = STRING;
-      } else {
-        command_line.argument_type = INT32;
-      }
-    } else {
+
+    char *first_space;
+    first_space = strchr(command, ' ');
+
+    if (first_space == NULL) {
+      Serial.println(F("No argument"));
       command_line.argument_type = NONE;
+      strlcpy(command_line.function_name, command, MAX_COMMAND_SIZE);
+      return;
+    }
+
+    strlcpy(command_line.function_name, command, first_space - command + 1); //NOTE: Off-by one?
+    strlcpy(command_line.str_argument, first_space + 1, MAX_COMMAND_SIZE - (first_space - command) - 1); //NOTE: Off-by one?
+
+    char *end;
+    command_line.int_argument = strtol(command_line.str_argument, &end, 0); // Accepts 123, 0xFF00FF or 0b1100010101
+
+    if (*end) {
+      command_line.argument_type = STRING;
+    } else {
+      command_line.argument_type = INT32;
     }
   }
 
@@ -105,10 +106,10 @@ namespace command_invoker {
   void listAvailableCommands() {
     qsort(commands, commands_count, sizeof(commands[0]), compareCommandNames);
     for (uint8_t i = 0; i < commands_count; i++) {
-      Serial.print("  ");
+      Serial.print(F("  "));
       Serial.print(commands[i].name);
       Serial.print(commands[i].doc);
-      Serial.println(".");
+      Serial.println(F("."));
     }
   }
 
