@@ -84,8 +84,8 @@ namespace command_invoker {
       return;
     }
 
-    strlcpy(command_line.function_name, command, first_space - command + 1); //NOTE: Off-by one?
-    strlcpy(command_line.str_argument, first_space + 1, MAX_COMMAND_SIZE - (first_space - command) - 1); //NOTE: Off-by one?
+    strlcpy(command_line.function_name, command, first_space - command + 1);
+    strlcpy(command_line.str_argument, first_space + 1, MAX_COMMAND_SIZE - (first_space - command) - 1);
 
     char *end;
     command_line.int_argument = strtol(command_line.str_argument, &end, 0); // Accepts 123 or 0xFF00FF
