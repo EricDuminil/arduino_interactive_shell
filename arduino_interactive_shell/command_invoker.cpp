@@ -88,7 +88,7 @@ namespace command_invoker {
     strlcpy(command_line.str_argument, first_space + 1, MAX_COMMAND_SIZE - (first_space - command) - 1); //NOTE: Off-by one?
 
     char *end;
-    command_line.int_argument = strtol(command_line.str_argument, &end, 0); // Accepts 123, 0xFF00FF or 0b1100010101
+    command_line.int_argument = strtol(command_line.str_argument, &end, 0); // Accepts 123 or 0xFF00FF
 
     if (*end) {
       command_line.argument_type = STRING;
