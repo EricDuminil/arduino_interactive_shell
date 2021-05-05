@@ -113,39 +113,49 @@ namespace command_invoker {
     }
   }
 
+  String getValue(String data, char separator, int index) {
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+      if (data.charAt(i) == separator || i == maxIndex) {
+        found++;
+        strIndex[0] = strIndex[1] + 1;
+        strIndex[1] = (i == maxIndex) ? i + 1 : i;
+      }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+  }
+
   /*
    * Tries to find the corresponding callback for a given command. Name and parameter type should fit.
    */
   void execute(const char *command_str) {
-    CommandLine input;
-    parseCommand(command_str, input);
-    for (uint8_t i = 0; i < commands_count; i++) {
-      if (!strcmp(input.function_name, commands[i].name) && input.argument_type == commands[i].parameter_type) {
-        Serial.print(F("Calling : "));
-        Serial.print(input.function_name);
-        switch (input.argument_type) {
-        case NONE:
-          Serial.println(F("()"));
-          commands[i].voidFunction();
-          return;
-        case INT32:
-          Serial.print(F("("));
-          Serial.print(input.int_argument);
-          Serial.println(F(")"));
-          commands[i].intFunction(input.int_argument);
-          return;
-        case STRING:
-          Serial.print(F("('"));
-          Serial.print(input.str_argument);
-          Serial.println(F("')"));
-          commands[i].strFunction(input.str_argument);
-          return;
-        }
-      }
+    String myString = String(command_str);
+    String x_str = getValue(myString, ' ', 0);
+    String op_str = getValue(myString, ' ', 1);
+    String y_str = getValue(myString, ' ', 2);
+    long x = x_str.toInt();
+    long y = y_str.toInt();
+    long result;
+    if (op_str == "*") {
+      Serial.println("Multiplication!");
+      result = x * y;
+    } else if (op_str == "+") {
+      Serial.println("Addition!");
+      result = x + y;
+    } else if (op_str == "-") {
+      Serial.println("Soustraction!");
+      result = x - y;
+    } else if (op_str == "/") {
+      Serial.println("Division!");
+      result = x / y;
+    } else {
+      Serial.println("Aucune idée. :(");
+      return;
     }
-    Serial.print(F("'"));
-    Serial.print(command_str);
-    Serial.println(F("' not supported. Available commands :"));
-    listAvailableCommands();
+    Serial.print(" = ");
+    Serial.println(result);
   }
 }
