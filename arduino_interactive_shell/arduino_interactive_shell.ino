@@ -35,20 +35,7 @@ void setup() {
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  // Define commands. Could be done in separate libraries (e.g. MQTT, LoRa, Webserver, ...)
-  command_invoker::defineIntCommand("led", controlLED, F(" 1/0 (LED on/off)"));
-  command_invoker::defineIntCommand("double", multiplyBy2, F(" 123 (Doubles the input value)"));
-  command_invoker::defineStringCommand("hello", hello, F(" name (Says hello)"));
-
-  // Commands can also be created with lambdas.
-  command_invoker::defineCommand("reset", []() {
-    ESP.restart();
-  }, F(" (restarts the microcontroller)"));
-
-  // Simple example. Turn LED on at startup.
-  command_invoker::execute("led 1");
-
-  Serial.println(F("Console is ready!"));
+  Serial.println(F("Bonjour! Que puis-je calculer pour vous?"));
   Serial.print(F("> "));
 }
 

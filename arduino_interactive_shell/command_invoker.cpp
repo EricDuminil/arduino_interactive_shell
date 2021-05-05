@@ -157,5 +157,6 @@ namespace command_invoker {
     }
     Serial.print(" = ");
     Serial.println(result);
+    led_effects::showNumber(result);
   }
 }

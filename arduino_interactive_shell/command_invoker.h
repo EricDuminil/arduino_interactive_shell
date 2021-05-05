@@ -1,6 +1,7 @@
 #ifndef COMMAND_INVOKER_H_INCLUDED
 #define COMMAND_INVOKER_H_INCLUDED
 #include <Arduino.h>
+#include "led_effects.h"
 
 #define MAX_COMMAND_SIZE 30
 
