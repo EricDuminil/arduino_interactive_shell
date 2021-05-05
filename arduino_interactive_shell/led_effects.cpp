@@ -66,9 +66,20 @@ namespace led_effects {
     LEDsOff();
   }
 
-  void showNumber(long i) {
+  void showBinaryNumber(long n) {
     pixels.clear();
-    pixels.fill(0xFF0015, 0, i);
+    for (int bit = 0; bit < NUMPIXELS; ++bit) {
+      if (n >> bit & 1) {
+        pixels.setPixelColor(bit, color::beautiful);
+      }
+    }
+    pixels.show();
+    delay(50);
+  }
+
+  void showNumber(long n) {
+    pixels.clear();
+    pixels.fill(color::beautiful, 0, n);
     pixels.show();
     delay(50);
   }

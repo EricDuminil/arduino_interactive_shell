@@ -137,26 +137,31 @@ namespace command_invoker {
     String op_str = getValue(myString, ' ', 1);
     String y_str = getValue(myString, ' ', 2);
     long x = x_str.toInt();
-    long y = y_str.toInt();
     long result;
-    if (op_str == "*") {
-      Serial.println("Multiplication!");
-      result = x * y;
-    } else if (op_str == "+") {
-      Serial.println("Addition!");
-      result = x + y;
-    } else if (op_str == "-") {
-      Serial.println("Soustraction!");
-      result = x - y;
-    } else if (op_str == "/") {
-      Serial.println("Division!");
-      result = x / y;
+    if (op_str == "" && y_str == "") {
+      result = x;
     } else {
-      Serial.println("Aucune idée. :(");
-      return;
+      long y = y_str.toInt();
+      if (op_str == "*") {
+        Serial.println("Multiplication!");
+        result = x * y;
+      } else if (op_str == "+") {
+        Serial.println("Addition!");
+        result = x + y;
+      } else if (op_str == "-") {
+        Serial.println("Soustraction!");
+        result = x - y;
+      } else if (op_str == "/") {
+        Serial.println("Division!");
+        result = x / y;
+      } else {
+        Serial.println("Aucune idée. :(");
+        return;
+      }
     }
     Serial.print(" = ");
     Serial.println(result);
-    led_effects::showNumber(result);
+    led_effects::showBinaryNumber(result);
+//    led_effects::showNumber(result);
   }
 }

@@ -14,6 +14,7 @@ namespace color {
   const uint32_t blue = 0x0000FF;
   const uint32_t black = 0x000000;
   const uint32_t magenta = 0xFF00FF;
+  const uint32_t beautiful = 0xFF0015;
 }
 
 namespace led_effects {
@@ -23,6 +24,7 @@ namespace led_effects {
   void LEDsOff();
 
   void setupRing();
-  void showNumber(long i);
+  void showBinaryNumber(long n);
+  void showNumber(long n);
 }
 #endif
