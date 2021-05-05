@@ -18,6 +18,15 @@ void controlLED(int32_t onOff) {
   digitalWrite(LED_BUILTIN, onOff);
 }
 
+void hello(char *name) {
+  Serial.print("HELLO ");
+  Serial.print(name);
+  Serial.println("!");
+  Serial.print("GOODBYE ");
+  Serial.print(name);
+  Serial.println("!");
+}
+
 /**
  * Setup
  */
@@ -29,6 +38,7 @@ void setup() {
   // Define commands. Could be done in separate libraries (e.g. MQTT, LoRa, Webserver, ...)
   command_invoker::defineIntCommand("led", controlLED, F(" 1/0 (LED on/off)"));
   command_invoker::defineIntCommand("double", multiplyBy2, F(" 123 (Doubles the input value)"));
+  command_invoker::defineStringCommand("hello", hello, F(" name (Says hello)"));
 
   // Commands can also be created with lambdas.
   command_invoker::defineCommand("reset", []() {
