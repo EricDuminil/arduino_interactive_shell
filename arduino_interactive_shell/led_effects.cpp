@@ -77,9 +77,27 @@ namespace led_effects {
     delay(50);
   }
 
-  void showNumber(long n) {
+  void redAlert() {
     pixels.clear();
-    pixels.fill(color::beautiful, 0, n);
+    for (int i = 0; i < 11; i++) {
+      pixels.setBrightness(static_cast<int>(config::max_brightness * (1 - i * 0.1)));
+      delay(50);
+      pixels.fill(color::beautiful);
+      pixels.show();
+    }
+  }
+
+  void showNumber(long n) {
+    for (int i = 0; i < n / NUMPIXELS; i++) {
+      redAlert();
+    }
+    pixels.clear();
+    pixels.show();
+    delay(200);
+    pixels.setBrightness(config::max_brightness);
+    if (n % NUMPIXELS){
+      pixels.fill(color::beautiful, 0, n % NUMPIXELS);
+    }
     pixels.show();
     delay(50);
   }
