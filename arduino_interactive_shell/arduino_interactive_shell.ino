@@ -3,29 +3,7 @@
  ***************************************************************************************************/
 
 #include "command_invoker.h"
-
-/**
- * Some example functions, which could be defined in separate libraries.
- */
-
-void multiplyBy2(int32_t x) {
-  Serial.print(x);
-  Serial.print(" * 2 = ");
-  Serial.println(2 * x);
-}
-
-void controlLED(int32_t onOff) {
-  digitalWrite(LED_BUILTIN, onOff);
-}
-
-void hello(char *name) {
-  Serial.print("HELLO ");
-  Serial.print(name);
-  Serial.println("!");
-  Serial.print("GOODBYE ");
-  Serial.print(name);
-  Serial.println("!");
-}
+#include "led_effects.h"
 
 /**
  * Setup
@@ -34,6 +12,8 @@ void hello(char *name) {
 void setup() {
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
+
+  led_effects::setupRing();
 
   Serial.println(F("Bonjour! Que puis-je calculer pour vous?"));
   Serial.print(F("> "));
