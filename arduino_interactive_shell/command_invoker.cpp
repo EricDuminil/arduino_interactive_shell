@@ -16,10 +16,7 @@ namespace command_invoker {
         Serial.println("Je n'ai pas compris la question. :(");
         return;
     }
-    Serial.print(" = ");
-    char result_str[30];
-    snprintf(result_str, 30, "%.10g", result);
-    Serial.println(result_str);
+    Serial.printf(" = %.10g\n", result);
     led_effects::showBinaryNumber(result);
 //    led_effects::showNumber(result);
   }
